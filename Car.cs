@@ -33,7 +33,8 @@ namespace ThreadLab
             {
                 int rnd = random.Next(1, 51);
 
-                if (rnd == 10)
+                // Probability of 1/50
+                if (rnd == 1)
                 {
                     Thread.Sleep(3000);
                     Speed -= 10;
@@ -41,7 +42,8 @@ namespace ThreadLab
                     Console.WriteLine($"Speed reduced to {Speed} m/s");
                 }
 
-                else if (rnd == 20 || rnd == 50 || rnd == 49)
+                // Probability of 2/50
+                else if (rnd <= 2)
                 {
                     Thread.Sleep(4000);
                     Speed -= 8;
@@ -49,7 +51,8 @@ namespace ThreadLab
                     Console.WriteLine("Slowing down 4 seconds");
                 }
 
-                else if (rnd == 30 || rnd == 40 || rnd == 43)
+                // Probability of 5/50
+                else if (rnd <= 5)
                 {
                     Console.WriteLine($"{Name} has a dirty windshield. Needs a carwash!");
                     Console.WriteLine("Slowing down 5 seconds");
@@ -57,25 +60,11 @@ namespace ThreadLab
                     Speed -= 5;
                 }
 
-                else if (rnd == 1 || rnd == 15)
+                // Probability of 10/50
+                else if (rnd <= 10)
                 {
                     Speed -= 5;
                     Console.WriteLine($"{Name} has engine trouble. Speed reduced to {Speed} m/s!");
-                }
-
-                // Check if distance is greater than or equal to 10000 after an event
-                if (DistanceCovered >= 10000)
-                {
-                    lock (lockObject)
-                    {
-                        if (!RaceFinished)
-                        {
-                            RaceFinished = true;
-                            Console.WriteLine($"Race finished! {Name} reached the goal.");
-                            eventTimer.Stop();
-                            eventTimer.Dispose();
-                        }
-                    }
                 }
             };
 
@@ -83,9 +72,6 @@ namespace ThreadLab
 
             while (true)
             {
-                if (RaceFinished)
-                    break;
-
                 stopwatch.Start();
                 TimeSpan elapsed = stopwatch.Elapsed;
 
@@ -100,9 +86,9 @@ namespace ThreadLab
                             Console.WriteLine($"Race finished! {Name} reached the goal.");
                             eventTimer.Stop();
                             eventTimer.Dispose();
+                            break;
                         }
                     }
-                    break;
                 }
 
                 // Continuing to update distance
